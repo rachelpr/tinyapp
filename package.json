@@ -1,0 +1,20 @@
+{
+  "name": "tinyapp",
+  "version": "1.0.0",
+  "description": "This project is for making a URL shortening service similar to TinyURL, Bitly, or Goo.gl. It is created as part of my studies at Lighthouse Labs.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rachelpr/tinyapp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rachelpr/tinyapp/issues"
+  },
+  "homepage": "https://github.com/rachelpr/tinyapp#readme"
+}
