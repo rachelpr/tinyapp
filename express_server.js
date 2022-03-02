@@ -34,3 +34,15 @@ app.post("/urls/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`)
 });
+
+const generateRandomString = function () {
+  let randomString = ""
+  let chars = "abcdefghijklmnopqrstufwxyzABCDEFGHIJKLMNOPQRSTUFWXYZ1234567890"
+  let charLength = chars.length
+  for (let i = 0; i < 6; i++) {
+    randomString += chars.charAt(Math.random() * charLength);
+  }
+  return randomString
+}
+
+console.log(generateRandomString())
