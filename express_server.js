@@ -15,6 +15,20 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+const users = {
+  "userRandomID": {
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-lifted-truck"
+  },
+  user2RandomID: {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishes-stink"
+  }
+}
+
+
 app.get("/urls", (req, res) => {
   const templateVars = {
     urls: urlDatabase,
@@ -93,4 +107,12 @@ const generateRandomString = function () {
   return randomString
 }
 
-
+const generateRandomID = function () {
+  let randomID = ""
+  let chars = "1234567890!@#$%^&*()"
+  let charLength = chars.length
+  for (let i = 0; i < 8; i++) {
+    randomID += chars.charAt(Math.random() * charLength);
+  }
+  return randomID
+}
