@@ -21,7 +21,7 @@ const users = {
     email: "user@example.com",
     password: "purple-lifted-truck"
   },
-  user2RandomID: {
+  "user2RandomID": {
     id: "user2RandomID",
     email: "user2@example.com",
     password: "dishes-stink"
@@ -58,6 +58,20 @@ app.post("/urls/", (req, res) => {
   res.redirect(`/urls/${shortURL}`);
 });
 
+app.post("/register", (req, res) => {
+  const randomUserID = generateRandomID();
+  const userEmail = req.body.email
+  const userPassword = req.body.password
+  users[randomUserID] = {
+    id: randomUserID,
+    email: userEmail,
+    password: userPassword
+  }
+  res.cookie("user_id", randomUserID)
+  console.log(users)
+  res.redirect("/urls")
+});
+
 app.get("/u/:shortURL", (req, res) => {
   const longURL = urlDatabase[req.params.shortURL]
   res.redirect(longURL);
@@ -78,7 +92,6 @@ app.post("/urls/:shortURL", (req, res) => {
 app.post("/login", (req, res) => {
   const username = req.body["username"]
   res.cookie("username", username)
-  console.log("Username:", username)
   res.redirect("/urls")
 });
 
@@ -91,6 +104,7 @@ app.get("/register", (req, res) => {
   const templateVars = { username: req.cookies["username"] }
   res.render("urls_register", templateVars)
 });
+
 
 
 app.listen(PORT, () => {
@@ -109,10 +123,11 @@ const generateRandomString = function () {
 
 const generateRandomID = function () {
   let randomID = ""
-  let chars = "1234567890!@#$%^&*()"
+  let chars = "1234567890"
   let charLength = chars.length
   for (let i = 0; i < 8; i++) {
     randomID += chars.charAt(Math.random() * charLength);
   }
   return randomID
 }
+
