@@ -113,6 +113,13 @@ app.get("/register", (req, res) => {
   res.render("urls_register", templateVars)
 });
 
+app.get("/login", (req, res) => {
+  const templateVars = {
+    user: users[req.cookies["userID"]],
+  };
+  res.render("urls_login", templateVars)
+});
+
 
 
 app.listen(PORT, () => {
