@@ -32,7 +32,7 @@ const users = {
 app.get("/urls", (req, res) => {
   const templateVars = {
     urls: urlDatabase,
-    user: users[req.cookies["userID"]],
+    user: users[req.cookies["user_id"]],
   };
   res.render("urls_index", templateVars);
 });
@@ -59,25 +59,25 @@ app.post("/urls/", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  if (req.body.email === "" || req.body.password === "") {
-    res.statusCode = 400;
-    res.send("Error: Enter an email and password")
-  } else {
-    if (!emailExists(req.body.email)) {
+  if (req.body.email && req.body.password) {
+    if (!emailExists(req.body.email, users)) {
       const userID = generateRandomID();
       users[userID] = {
         userID,
         email: req.body.email,
         password: req.body.password
       }
+      console.log(users[userID].userID, users[userID].password)
+      res.cookie("user_id", users[userID].userID)
+      res.redirect("/urls")
     } else {
       res.statusCode = 400;
       res.send("Error 400: You've already registered!")
     }
+  } else {
+    res.statusCode = 400;
+    res.send("Error: Enter an email and password")
   }
-  //res.cookie("user_id", userID)
-  console.log(users)
-  res.redirect("/urls")
 });
 
 app.get("/u/:shortURL", (req, res) => {
@@ -98,24 +98,35 @@ app.post("/urls/:shortURL", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  const username = req.body["username"]
-  res.cookie("username", username)
-  res.redirect("/urls")
+  const user = getUserWithEmail(req.body.email)
+  console.log(user)
+  if (user) {
+    if (req.body.password === user.password) {
+      res.cookie("user_id", user.userID)
+      res.redirect("/urls")
+    } else {
+      res.statusCode = 403;
+      res.send("Error 403: Incorrect Password")
+    }
+  } else {
+    res.statusCode = 403;
+    res.send("Error 403: Email cannot be found")
+  }
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie("username");
+  res.clearCookie("user_id");
   res.redirect("/urls");
 });
 
 app.get("/register", (req, res) => {
-  const templateVars = { user: users[req.cookies["userID"]] }
+  const templateVars = { user: users[req.cookies["user_id"]] }
   res.render("urls_register", templateVars)
 });
 
 app.get("/login", (req, res) => {
   const templateVars = {
-    user: users[req.cookies["userID"]],
+    user: users[req.cookies["user_id"]],
   };
   res.render("urls_login", templateVars)
 });
@@ -153,4 +164,13 @@ const emailExists = function (email) {
     }
   }
   return false;
+}
+
+const getUserWithEmail = function (email) {
+  for (let userID in users) {
+    if (users[userID].email === email) {
+      return users[userID];
+    }
+  }
+  return undefined;
 }
