@@ -67,7 +67,6 @@ app.post("/register", (req, res) => {
         email: req.body.email,
         password: req.body.password
       }
-      console.log(users[userID].userID, users[userID].password)
       res.cookie("user_id", users[userID].userID)
       res.redirect("/urls")
     } else {
@@ -99,7 +98,6 @@ app.post("/urls/:shortURL", (req, res) => {
 
 app.post("/login", (req, res) => {
   const user = getUserWithEmail(req.body.email)
-  console.log(user)
   if (user) {
     if (req.body.password === user.password) {
       res.cookie("user_id", user.userID)
