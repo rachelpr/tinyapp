@@ -38,24 +38,34 @@ app.get("/urls", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  const templateVars = { user: users[req.cookies["userID"]] }
-  res.render("urls_new", templateVars)
+  const templateVars = { user: users[req.cookies["user_id"]] }
+  if (req.cookies["user_id"]) {
+    res.render("urls_new", templateVars);
+  } else {
+    res.render("urls_login", templateVars);
+  }
 });
 
 app.get("/urls/:shortURL", (req, res) => {
   const templateVars = {
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL],
-    user: users[req.cookies["userID"]],
+    user: users[req.cookies["user_id"]],
   };
   res.render("urls_show", templateVars);
 });
 
 app.post("/urls/", (req, res) => {
-  const shortURL = generateRandomString();
-  const longURL = req.body.longURL
-  urlDatabase[shortURL] = longURL;
-  res.redirect(`/urls/${shortURL}`);
+  if (req.cookies["user_id"]) {
+    const shortURL = generateRandomString();
+    const longURL = req.body.longURL
+    urlDatabase[shortURL] = longURL;
+    res.redirect(`/urls/${shortURL}`)
+    res.render("urls_new", templateVars);
+  } else {
+    res.send("Error 400: Not logged in");
+  }
+  ;
 });
 
 app.post("/register", (req, res) => {
@@ -91,9 +101,12 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 app.post("/urls/:shortURL", (req, res) => {
-  const shortURL = req.params.shortURL;
-  urlDatabase[shortURL] = req.body.longURLEdit
-  res.redirect("/urls")
+  if (req.cookies["user_id"]) {
+    res.render("urls_new", templateVars);
+  } else {
+    res.render("urls_login", templateVars);
+  }
+
 });
 
 app.post("/login", (req, res) => {
