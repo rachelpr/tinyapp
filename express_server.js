@@ -11,8 +11,14 @@ app.use(cookieParser());
 app.set("view engine", "ejs");
 
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  b6UTxQ: {
+    longURL: "https://www.tsn.ca",
+    userID: "aJ48lW"
+  },
+  i3BoGr: {
+    longURL: "https://www.google.ca",
+    userID: "aJ48lW"
+  }
 };
 
 const users = {
@@ -58,10 +64,13 @@ app.get("/urls/:shortURL", (req, res) => {
 app.post("/urls/", (req, res) => {
   if (req.cookies["user_id"]) {
     const shortURL = generateRandomString();
-    const longURL = req.body.longURL
-    urlDatabase[shortURL] = longURL;
+    let longURL = req.body.longURL
+    urlDatabase[shortURL] = {
+      longURL: longURL,
+      userID: req.cookies["user_id"]
+    }
     res.redirect(`/urls/${shortURL}`)
-    res.render("urls_new", templateVars);
+    //res.render("urls_new", templateVars);
   } else {
     res.send("Error 400: Not logged in");
   }
@@ -101,6 +110,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 app.post("/urls/:shortURL", (req, res) => {
+  const templateVars = { user: users[req.cookies["user_id"]] }
   if (req.cookies["user_id"]) {
     res.render("urls_new", templateVars);
   } else {
