@@ -109,7 +109,7 @@ app.post("/register", (req, res) => {
       users[userID] = {
         userID,
         email: req.body.email,
-        password: req.body.password
+        password: bcrypt.hashSync(req.body.password, 10)
       }
       res.cookie("user_id", users[userID].userID)
       res.redirect("/urls")
@@ -152,7 +152,7 @@ app.post("/urls/:shortURL", (req, res) => {
 app.post("/login", (req, res) => {
   const user = getUserWithEmail(req.body.email)
   if (user) {
-    if (req.body.password === user.password) {
+    if (bcrypt.compareSync(req.body.password, user.password)) {
       res.cookie("user_id", user.userID)
       res.redirect("/urls")
     } else {
