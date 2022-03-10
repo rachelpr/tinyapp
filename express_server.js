@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser")
+const cookieParser = require("cookie-parser");
+const bcrypt = require("bcryptjs");
 
 const PORT = 8080;
 
@@ -131,6 +132,8 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   const shortURL = req.params.shortURL;
   if (req.cookies["user_id"] === urlDatabase[shortURL].userID) {
     delete urlDatabase[shortURL];
+  } else {
+    res.send("You cannot do that")
   }
   res.redirect("/urls");
 });
