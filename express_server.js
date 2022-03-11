@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session");
 const bcrypt = require("bcryptjs");
+const getUserWithEmail = require("./helpers")
 
 const PORT = 8080;
 
@@ -65,8 +66,8 @@ app.get("/urls", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
+  let templateVars = { user: users[req.session.user_id] }
   if (req.session.user_id) {
-    let templateVars = { user: users[req.session.user_id] }
     res.render("urls_new", templateVars);
   } else {
     res.render("redirect", templateVars);
@@ -100,7 +101,7 @@ app.post("/urls", (req, res) => {
     //res.render("urls_new", templateVars);
   } else {
 
-    res.send("Error 400: Not logged in");
+    res.send("Error 400: Unauthorized request");
   }
   ;
 });
@@ -220,15 +221,6 @@ const emailExists = function (email) {
     }
   }
   return false;
-}
-
-const getUserWithEmail = function (email) {
-  for (let userID in users) {
-    if (users[userID].email === email) {
-      return users[userID];
-    }
-  }
-  return undefined;
 }
 
 const urlsForUser = function (id) {
