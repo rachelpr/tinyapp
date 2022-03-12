@@ -117,7 +117,6 @@ app.post("/urls", (req, res) => {
   } else {
     res.status(400).send("Error: Unauthorized request");
   }
-  ;
 });
 
 //route to handle user registration
