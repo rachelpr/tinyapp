@@ -1,20 +1,26 @@
+//app configurations
 const express = require("express");
 const app = express();
+
 const bodyParser = require("body-parser");
-const cookieSession = require("cookie-session");
-const bcrypt = require("bcryptjs");
-const getUserWithEmail = require("./helpers")
-
-const PORT = 8080;
-
 app.use(bodyParser.urlencoded({ extended: true }));
+
+const cookieSession = require("cookie-session");
 app.use(cookieSession({
   name: "session",
   keys: ["aKey"],
 }));
 
+const bcrypt = require("bcryptjs");
+
+const PORT = 8080;
+
 app.set("view engine", "ejs");
 
+//helper functions
+const getUserWithEmail = require("./helpers")
+
+//database variables
 const urlDatabase = {
   b6UTxQ: {
     longURL: "https://www.tsn.ca",
@@ -43,6 +49,9 @@ const users = {
   }
 }
 
+//routes
+
+//a place to redirect a user to both register and login
 app.get("/redirect", (req, res) => {
   const templateVars = {
     urls: urlDatabase,
@@ -51,18 +60,15 @@ app.get("/redirect", (req, res) => {
   res.render("redirect", templateVars)
 });
 
+//urls index page
 app.get("/urls", (req, res) => {
-  //if (req.cookies["user_id"]) {
-  let id = req.session.user_id
-  let userUrls = urlsForUser(id)
+  const id = req.session.user_id
+  const userUrls = urlsForUser(id)
   const templateVars = {
     urls: userUrls,
     user: users[id],
   };
   res.render("urls_index", templateVars);
-  //} else {
-  //res.redirect("/redirect")
-  //}
 });
 
 app.get("/urls/new", (req, res) => {
@@ -72,23 +78,25 @@ app.get("/urls/new", (req, res) => {
   if (req.session.user_id) {
     res.render("urls_new", templateVars);
   } else {
-    res.render("redirect", templateVars);
+    res.render("urls_login", templateVars);
   }
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  let id = req.session.user_id
-  let userURLS = urlsForUser(id)
+  const id = req.session.user_id;
+  const userURLS = urlsForUser(id, urlDatabase);
+  const shortURL = req.params.shortURL;
   const templateVars = {
-    shortURL: req.params.shortURL,
     urls: userURLS,
+    shortURL: req.params.shortURL,
     user: users[req.session.user_id],
   };
-  //if (req.cookies["user_id"]) {
-  res.render("urls_show", templateVars);
-  //} else {
-  //  res.render("redirect", templateVars);
-  //}
+  if (!id || !userURLS[shortURL]) {
+    res.status(401).send("Unauthorized request")
+    res.render("urls_show", templateVars);
+  } else {
+    res.render("urls_show", templateVars);
+  }
 });
 
 app.post("/urls", (req, res) => {
@@ -100,9 +108,7 @@ app.post("/urls", (req, res) => {
       userID: req.session.user_id
     }
     res.redirect(`/urls/${shortURL}`)
-    //res.render("urls_new", templateVars);
   } else {
-
     res.status(400).send("Error: Unauthorized request");
   }
   ;
@@ -128,7 +134,7 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL]
+  const longURL = urlDatabase[req.params.shortURL].longURL
   res.redirect(longURL);
 });
 
@@ -136,10 +142,10 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   const shortURL = req.params.shortURL;
   if (req.session.user_id === urlDatabase[shortURL].userID) {
     delete urlDatabase[shortURL];
+    res.redirect("/urls");
   } else {
-    res.send("You cannot do that")
+    res.status(400).send("You cannot do that")
   }
-  res.redirect("/urls");
 });
 
 app.post("/urls/:shortURL", (req, res) => {
