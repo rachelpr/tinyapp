@@ -17,8 +17,8 @@ const PORT = 8080;
 
 app.set("view engine", "ejs");
 
-//helper functions
-const getUserWithEmail = require("./helpers")
+//importing helper function
+const { getUserWithEmail } = require("./helpers")
 
 //database variables
 const urlDatabase = {
@@ -51,7 +51,7 @@ const users = {
 
 //routes
 
-//a place to redirect a user to both register and login
+//a place to redirect a user to both register and login to get using the app
 app.get("/redirect", (req, res) => {
   const templateVars = {
     urls: urlDatabase,
@@ -68,9 +68,13 @@ app.get("/urls", (req, res) => {
     urls: userUrls,
     user: users[id],
   };
+  if (!id) {
+    res.redirect("redirect")
+  }
   res.render("urls_index", templateVars);
 });
 
+//page to create a new url
 app.get("/urls/new", (req, res) => {
   const templateVars = {
     user: users[req.session.user_id]
@@ -82,6 +86,7 @@ app.get("/urls/new", (req, res) => {
   }
 });
 
+//page for short urls
 app.get("/urls/:shortURL", (req, res) => {
   const id = req.session.user_id;
   const userURLS = urlsForUser(id, urlDatabase);
@@ -99,6 +104,7 @@ app.get("/urls/:shortURL", (req, res) => {
   }
 });
 
+//route to handle url creation
 app.post("/urls", (req, res) => {
   if (req.session.user_id) {
     const shortURL = generateRandomString();
@@ -114,6 +120,7 @@ app.post("/urls", (req, res) => {
   ;
 });
 
+//route to handle user registration
 app.post("/register", (req, res) => {
   if (req.body.email && req.body.password) {
     if (!emailExists(req.body.email, users)) {
@@ -133,11 +140,13 @@ app.post("/register", (req, res) => {
   }
 });
 
+//redirects to actual long url
 app.get("/u/:shortURL", (req, res) => {
   const longURL = urlDatabase[req.params.shortURL].longURL
   res.redirect(longURL);
 });
 
+//route to delete URL if url belongs to user
 app.post("/urls/:shortURL/delete", (req, res) => {
   const shortURL = req.params.shortURL;
   if (req.session.user_id === urlDatabase[shortURL].userID) {
@@ -148,6 +157,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   }
 });
 
+//route to edit url if it belongs to user
 app.post("/urls/:shortURL", (req, res) => {
   const shortURL = req.params.shortURL
   if (req.session.user_id === urlDatabase[shortURL].userID) {
@@ -158,8 +168,9 @@ app.post("/urls/:shortURL", (req, res) => {
   }
 });
 
+//route to handle user logging in
 app.post("/login", (req, res) => {
-  const user = getUserWithEmail(req.body.email)
+  const user = getUserWithEmail(req.body.email, users)
   if (user) {
     if (bcrypt.compareSync(req.body.password, user.password)) {
       req.session.user_id = user.userID;
@@ -172,17 +183,20 @@ app.post("/login", (req, res) => {
   }
 });
 
+//route to handle user logout
 app.post("/logout", (req, res) => {
   res.clearCookie("session");
   res.clearCookie("session.sig")
   res.redirect("/urls");
 });
 
+//registration page
 app.get("/register", (req, res) => {
   const templateVars = { user: users[req.session.user_id] }
   res.render("urls_register", templateVars)
 });
 
+//login page
 app.get("/login", (req, res) => {
   const templateVars = {
     user: users[req.session.user_id],
@@ -190,12 +204,12 @@ app.get("/login", (req, res) => {
   res.render("urls_login", templateVars)
 });
 
-
-
+//server listening
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`)
 });
 
+//helper functions
 const generateRandomString = function () {
   let randomString = ""
   let chars = "abcdefghijklmnopqrstufwxyzABCDEFGHIJKLMNOPQRSTUFWXYZ1234567890"
