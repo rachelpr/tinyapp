@@ -10,14 +10,17 @@ This project is for making a URL shortening service similar to TinyURL, Bitly, o
 
 ## Final Product
 
-<img width="1436" alt="Screen Shot 2022-03-12 at 2 58 12 PM" src="https://user-images.githubusercontent.com/93479462/158067903-8bec6d98-c8c6-4a7d-823a-4b5aae7287ca.png">
-<img width="1434" alt="Screen Shot 2022-03-12 at 2 58 02 PM" src="https://user-images.githubusercontent.com/93479462/158067907-a63ee9c7-1b2f-4822-ad25-134fd0ef8e60.png">
-<img width="1436" alt="Screen Shot 2022-03-12 at 2 57 10 PM" src="https://user-images.githubusercontent.com/93479462/158067916-ef71a83c-173a-4fa1-b55f-87653c06a5c9.png">
-<img width="1432" alt="Screen Shot 2022-03-12 at 2 56 59 PM" src="https://user-images.githubusercontent.com/93479462/158067920-90418585-4d04-49e8-9741-93cc55154140.png">
-<img width="1432" alt="Screen Shot 2022-03-12 at 2 56 59 PM" src="https://user-images.githubusercontent.com/93479462/158067931-4496bb10-7f59-40de-ab20-8f77bfa21089.png">
-<img width="1433" alt="Screen Shot 2022-03-12 at 2 56 41 PM" src="https://user-images.githubusercontent.com/93479462/158067941-63882220-ef47-4f98-8ad3-fe74949913d9.png">
-<img width="1432" alt="Screen Shot 2022-03-12 at 2 55 47 PM" src="https://user-images.githubusercontent.com/93479462/158067947-d7b62cc4-a48e-43ad-9ea5-28783ea441b1.png">
-<img width="1439" alt="Screen Shot 2022-03-12 at 1 37 52 PM" src="https://user-images.githubusercontent.com/93479462/158067950-5871d289-b152-4cf4-96a3-af1e7a4aaffd.png">
+<img width="1439" alt="Screen Shot of login/register page" src="https://user-images.githubusercontent.com/93479462/158067950-5871d289-b152-4cf4-96a3-af1e7a4aaffd.png">
+
+<img width="1436" alt="Screen Shot of login page" src="https://user-images.githubusercontent.com/93479462/158067903-8bec6d98-c8c6-4a7d-823a-4b5aae7287ca.png">
+
+<img width="1436" alt="Screen Shot of register page" src="https://user-images.githubusercontent.com/93479462/158067916-ef71a83c-173a-4fa1-b55f-87653c06a5c9.png">
+
+<img width="1434" alt="Screen Shot of short URL page" src="https://user-images.githubusercontent.com/93479462/158067907-a63ee9c7-1b2f-4822-ad25-134fd0ef8e60.png">
+
+<img width="1432" alt="Screen Shot of Create New URL page" src="https://user-images.githubusercontent.com/93479462/158067920-90418585-4d04-49e8-9741-93cc55154140.png">
+
+<img width="1433" alt="Screen Shot of My URLs page" src="https://user-images.githubusercontent.com/93479462/158067941-63882220-ef47-4f98-8ad3-fe74949913d9.png">
 
 ## Dependencies
 
@@ -28,19 +31,6 @@ This project is for making a URL shortening service similar to TinyURL, Bitly, o
 - bcrypt
 - EJS
 
-## Final Product
-
-<img width="1439" alt="Screen Shot of login/register page" src="https://user-images.githubusercontent.com/93479462/158067950-5871d289-b152-4cf4-96a3-af1e7a4aaffd.png">
-
-<img width="1436" alt="Screen Shot 2022-03-12 at 2 58 12 PM" src="https://user-images.githubusercontent.com/93479462/158067903-8bec6d98-c8c6-4a7d-823a-4b5aae7287ca.png">
-
-<img width="1434" alt="Screen Shot 2022-03-12 at 2 58 02 PM" src="https://user-images.githubusercontent.com/93479462/158067907-a63ee9c7-1b2f-4822-ad25-134fd0ef8e60.png">
-
-<img width="1436" alt="Screen Shot 2022-03-12 at 2 57 10 PM" src="https://user-images.githubusercontent.com/93479462/158067916-ef71a83c-173a-4fa1-b55f-87653c06a5c9.png">
-
-<img width="1432" alt="Screen Shot 2022-03-12 at 2 56 59 PM" src="https://user-images.githubusercontent.com/93479462/158067920-90418585-4d04-49e8-9741-93cc55154140.png">
-
-<img width="1433" alt="Screen Shot 2022-03-12 at 2 56 41 PM" src="https://user-images.githubusercontent.com/93479462/158067941-63882220-ef47-4f98-8ad3-fe74949913d9.png">
 
 ## How To Get Started
 
