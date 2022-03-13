@@ -71,9 +71,10 @@ app.get("/urls", (req, res) => {
     user: users[id],
   };
   if (!id) {
-    res.redirect("/login");
+    res.render("login_error",templateVars);
+  } else{
+    res.render("urls_index", templateVars);
   }
-  res.render("urls_index", templateVars);
 });
 
 //page to create a new url
@@ -204,6 +205,13 @@ app.get("/login", (req, res) => {
   };
   res.render("urls_login", templateVars);
 });
+
+app.get("/login_error",(req,res)=> {
+  const templateVars = {
+    user: users[req.session.user_id],
+  };
+  res.render("login_error", templateVars);
+})
 
 //server listening
 app.listen(PORT, () => {
