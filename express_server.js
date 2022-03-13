@@ -20,7 +20,7 @@ const PORT = 8080;
 app.set("view engine", "ejs");
 
 //importing helper function
-const { getUserWithEmail } = require("./helpers");
+const { getUserWithEmail, generateRandomString, generateRandomID, emailExists, urlsForUser } = require("./helpers");
 
 //database variables
 const urlDatabase = {
@@ -65,13 +65,13 @@ app.get("/redirect", (req, res) => {
 //urls index page
 app.get("/urls", (req, res) => {
   const id = req.session.user_id;
-  const userUrls = urlsForUser(id);
+  const userUrls = urlsForUser(id,urlDatabase);
   const templateVars = {
     urls: userUrls,
     user: users[id],
   };
   if (!id) {
-    res.redirect("redirect");
+    res.redirect("/login");
   }
   res.render("urls_index", templateVars);
 });
@@ -210,42 +210,3 @@ app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
 
-//helper functions
-const generateRandomString = function () {
-  let randomString = "";
-  let chars = "abcdefghijklmnopqrstufwxyzABCDEFGHIJKLMNOPQRSTUFWXYZ1234567890";
-  let charLength = chars.length;
-  for (let i = 0; i < 6; i++) {
-    randomString += chars.charAt(Math.random() * charLength);
-  }
-  return randomString;
-};
-
-const generateRandomID = function () {
-  let randomID = "";
-  let chars = "1234567890";
-  let charLength = chars.length;
-  for (let i = 0; i < 8; i++) {
-    randomID += chars.charAt(Math.random() * charLength);
-  }
-  return randomID;
-};
-
-const emailExists = function (email) {
-  for (let user in users) {
-    if (users[user].email === email) {
-      return true;
-    }
-  }
-  return false;
-};
-
-const urlsForUser = function (id) {
-  let userUrls = {};
-  for (let shortURL in urlDatabase) {
-    if (urlDatabase[shortURL].userID === id) {
-      userUrls[shortURL] = urlDatabase[shortURL];
-    }
-  }
-  return userUrls;
-};
